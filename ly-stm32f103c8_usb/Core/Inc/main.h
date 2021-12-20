@@ -58,7 +58,7 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define USB_PULL_UP_Pin GPIO_PIN_1
+#define USB_PULL_UP_Pin GPIO_PIN_8
 #define USB_PULL_UP_GPIO_Port GPIOA
 #define LED1_Pin GPIO_PIN_8
 #define LED1_GPIO_Port GPIOB

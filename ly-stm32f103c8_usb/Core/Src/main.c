@@ -43,7 +43,10 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+#define APP_RX_DATA_SIZE 64
+#define APP_TX_DATA_SIZE 64
+extern uint8_t UserRxBufferFS[APP_RX_DATA_SIZE];
+extern uint8_t UserTxBufferFS[APP_TX_DATA_SIZE];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -106,16 +109,29 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-    if (HAL_GetTick() - time > 1000) {
-      time = HAL_GetTick();
-//      printf("Hello CDC Test\r\n");
-      CDC_Transmit_FS(prt1, sizeof(array));
-      HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
-    }
-//    HAL_Delay(200);  
-//    HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
+     uint16_t len = strlen((const char*)UserRxBufferFS);
     
-    /* USER CODE BEGIN 3 */
+    if(len > 0)
+    {
+      strncpy((char *)UserTxBufferFS, (const char*)UserRxBufferFS, len);    
+      strcat((char *)UserTxBufferFS, "\r\n");      
+      CDC_Transmit_FS((uint8_t*)UserTxBufferFS, strlen((const char*)UserTxBufferFS));      
+      memset(UserRxBufferFS, 0, sizeof(UserRxBufferFS));
+      memset(UserTxBufferFS, 0, sizeof(UserTxBufferFS));
+    }
+    
+    HAL_Delay(500);
+    
+//    if (HAL_GetTick() - time > 1000) {
+//      time = HAL_GetTick();
+////      printf("Hello CDC Test\r\n");
+//      CDC_Transmit_FS(prt1, sizeof(array));
+//      HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
+//    }
+////    HAL_Delay(200);  
+////    HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
+//    
+//    /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }
